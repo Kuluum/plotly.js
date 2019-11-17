@@ -235,16 +235,21 @@ function sankeyModel(layout, d, traceIndex) {
     }
 
     // Force node position
-    if(trace.node.x.length && trace.node.y.length) {
-        for(i = 0; i < Math.min(trace.node.x.length, trace.node.y.length, graph.nodes.length); i++) {
-            if(trace.node.x[i] && trace.node.y[i]) {
-                var pos = [trace.node.x[i] * width, trace.node.y[i] * height];
-                graph.nodes[i].x0 = pos[0] - nodeThickness / 2;
-                graph.nodes[i].x1 = pos[0] + nodeThickness / 2;
+    if(trace.node.x.length || trace.node.y.length) {
 
+        for(i = 0; i < Math.min(Math.max(trace.node.x.length, trace.node.y.length), graph.nodes.length); i++) {
+
+            if (trace.node.x[i]) {
+                var posX = trace.node.x[i] * width;
+                graph.nodes[i].x0 = posX - nodeThickness / 2;
+                graph.nodes[i].x1 = posX + nodeThickness / 2;
+            }
+
+            if (trace.node.y[i]) {
+                var posY = trace.node.y[i] * height;
                 var nodeHeight = graph.nodes[i].y1 - graph.nodes[i].y0;
-                graph.nodes[i].y0 = pos[1] - nodeHeight / 2;
-                graph.nodes[i].y1 = pos[1] + nodeHeight / 2;
+                graph.nodes[i].y0 = posY - nodeHeight / 2;
+                graph.nodes[i].y1 = posY + nodeHeight / 2;
             }
         }
         if(trace.arrangement === 'snap') {
